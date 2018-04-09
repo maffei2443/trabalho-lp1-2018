@@ -1,0 +1,1 @@
+(link)[https://blog.rust-lang.org/2015/05/11/traits.html]
