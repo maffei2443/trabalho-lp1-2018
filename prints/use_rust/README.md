@@ -1,0 +1,1 @@
+This repository contains some screenshots taken from (the rst official site)[https://www.rust-lang.org/en-US/friends.html], in which are exposed some companies that are employing **Rust** *in production*.
