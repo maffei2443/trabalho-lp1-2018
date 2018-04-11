@@ -1,4 +1,5 @@
         C
+- union
 - fortemente tipado / fortemente tipado / fracamente forçado (?)
 - baixo nivel
 - efciente
@@ -8,6 +9,7 @@
 - estaticamente tipado/fortemente tipado/ fracamente forcado
 
         Rust
+- enum
 - fortemente tipado
 - alto nivel (com abstracao custo-0), mas possibilita muito controle 
 ainda assim
