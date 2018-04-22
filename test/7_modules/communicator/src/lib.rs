@@ -5,9 +5,13 @@ pub mod client;
 pub mod network;
 
 
-mod tests {
+#[cfg(test)]
+mod test {
+    // super: move u one  module in the hierarchy from the current module
+    use super::client;
+
     #[test]
     fn it_works() {
-        assert_eq!(2 + 2, 4);
+        client::connect();
     }
 }
