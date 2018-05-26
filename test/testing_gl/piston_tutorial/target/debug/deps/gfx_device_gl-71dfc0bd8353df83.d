@@ -1,0 +1,11 @@
+/home/leo/Desktop/rust/trabalho-lp1-2018/test/testing_gl/piston_tutorial/target/debug/deps/libgfx_device_gl-71dfc0bd8353df83.rlib: /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/lib.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/command.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/factory.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/info.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/shade.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/state.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/tex.rs
+
+/home/leo/Desktop/rust/trabalho-lp1-2018/test/testing_gl/piston_tutorial/target/debug/deps/gfx_device_gl-71dfc0bd8353df83.d: /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/lib.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/command.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/factory.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/info.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/shade.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/state.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/tex.rs
+
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/lib.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/command.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/factory.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/info.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/shade.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/state.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/gfx_device_gl-0.14.6/src/tex.rs:

@@ -1,0 +1,14 @@
+/home/leo/Desktop/rust/trabalho-lp1-2018/test/testing_gl/fractal_piston2d/target/debug/deps/libpng-3cc7860a050272a2.rlib: /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/lib.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/chunk.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/crc.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/decoder/mod.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/decoder/stream.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/encoder.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/filter.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/traits.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/common.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/utils.rs
+
+/home/leo/Desktop/rust/trabalho-lp1-2018/test/testing_gl/fractal_piston2d/target/debug/deps/png-3cc7860a050272a2.d: /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/lib.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/chunk.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/crc.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/decoder/mod.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/decoder/stream.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/encoder.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/filter.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/traits.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/common.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/utils.rs
+
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/lib.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/chunk.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/crc.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/decoder/mod.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/decoder/stream.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/encoder.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/filter.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/traits.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/common.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/png-0.12.0/src/utils.rs:

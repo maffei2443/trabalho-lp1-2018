@@ -1,0 +1,10 @@
+/home/leo/Desktop/rust/trabalho-lp1-2018/test/testing_gl/piston_tutorial/target/debug/deps/libwayland_window-44a002614bd91a21.rlib: /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/lib.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/decorated_surface.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/themed_pointer.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/shell/mod.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/shell/xdg.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/shell/wl.rs
+
+/home/leo/Desktop/rust/trabalho-lp1-2018/test/testing_gl/piston_tutorial/target/debug/deps/wayland_window-44a002614bd91a21.d: /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/lib.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/decorated_surface.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/themed_pointer.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/shell/mod.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/shell/xdg.rs /home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/shell/wl.rs
+
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/lib.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/decorated_surface.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/themed_pointer.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/shell/mod.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/shell/xdg.rs:
+/home/maffei/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-window-0.7.0/src/shell/wl.rs:
