@@ -15,14 +15,11 @@ fn foo(mu: Arc<Mutex<i32> >) {
 fn main() {
 	let n = 90;
 	let data = Arc::new(Mutex::new(n));
-
+	for i in 1..4 {
+		println!("{:?}", i);
+	}
 	// let (tx, rx) = channel();
-	#[allow(unused_assignments)]
-	let mut r = thread::spawn(move || {});
-	#[allow(unused_assignments)]
-	let mut s = thread::spawn(move || {});
-	#[allow(unused_assignments)]
-	let mut t = thread::spawn(move || {});
+	let r;	let s;	let t;
 	{	
 		let dado = data.clone();
 		r = thread::spawn(move || foo(dado.clone()) );

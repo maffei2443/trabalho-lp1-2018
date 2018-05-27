@@ -1,45 +1,37 @@
-use std::sync::{Arc, Mutex};
+use std::sync::{Mutex, Arc};
 use std::thread;
-use std::sync::mpsc::channel;
 
-const N: usize = 10;
-
-// Spawn a few threads to increment a shared variable (non-atomically), and
-// let the main thread know once all increments are done.
-//
-// Here we're using an Arc to share memory among threads, and the data inside
-// the Arc is protected with a mutex.
-
-fn fake(f: std::sync::Arc<std::sync::Mutex<usize>>) {
-    let mut todo = f.clone().lock().unwrap();
-    println!("{:?}", todo);
-    *todo += 100;
+#[allow(non_snake_case)]
+fn modLock(x: &mut i32) {
+    *x *= 5;
+    println!("Mult 5");
 }
 
 
+fn top(x: Arc<Mutex<i32>>) {
+    let mut y = x.lock().unwrap();
+    *y += 10;
+    println!("topou! {}", *y);
+    modLock(&mut *y);
+}
+
 fn main() {
-    let data: std::sync::Arc<std::sync::Mutex<usize>> = Arc::new(Mutex::new(0));
+    let counter = Arc::new(Mutex::new(0));
+    let mut handles = vec![];
 
-
-
-    let (tx, rx) = channel();
-    for _ in 0..N {
-        let (data, tx) = (data.clone(), tx.clone());
-        thread::spawn(move || {
-            // The shared state can only be accessed once the lock is held.
-            // Our non-atomic increment is safe because we're the only thread
-            // which can access the shared state when the lock is held.
-            //
-            // We unwrap() the return value to assert that we are not expecting
-            // threads to ever fail while holding the lock.
-            let mut data = data.lock().unwrap();
-            *data += 1;
-            if *data == N {
-                tx.send(N).unwrap();
-            }
-            // the lock is unlocked here when `data` goes out of scope.
+    for _ in 0..10 {
+        let counter = Arc::clone(&counter);
+        let handle = thread::spawn(move || {
+            // let mut num = counter.lock().unwrap();
+            top(counter);
+            // *num += 1;
         });
+        handles.push(handle);
     }
 
-    println!("{:?}",  rx.recv().unwrap());
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Result: {}", *counter.lock().unwrap());
 }

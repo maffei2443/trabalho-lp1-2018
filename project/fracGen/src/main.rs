@@ -2,6 +2,11 @@ extern crate image;
 
 use image::RgbImage;
 
+const SIX_F: f64 = 6 as f64;
+const THREE_F: f64 = 3 as f64;
+const TWO_F: f64 = 2.0 as f64;
+// let SQRT_3: f64 = (3 as f64).sqrt();
+
 fn draw_line(img: &mut RgbImage, x0: i64, y0: i64, x1: i64, y1: i64) {
 
     // Create local variables for moving start point
@@ -34,24 +39,54 @@ fn draw_line(img: &mut RgbImage, x0: i64, y0: i64, x1: i64, y1: i64) {
         if err2 > -dx { err -= dy; x0 += sx; }
         if err2 < dy { err += dx; y0 += sy; }
     }
-
 }
 
-const SIX_F: f64 = 6 as f64;
-const THREE_F: f64 = 3 as f64;
-const TWO_F: f64 = 2.0 as f64;
-// let SQRT_3: f64 = (3 as f64).sqrt();
+// TODO: refatorar o cohdigo pra usar enum
+// enum Gambs {
+//     arc(Arc<Mutex<RgbImage>>),
+//     img(&mut RgbImage)
+// }
 
-fn rendersnowflakeside(p1x: f64, p1y: f64, p2x: f64, p2y: f64, n: i64, img: &mut RgbImage){
-    if n == 0 {
-        draw_line(img, p1x as i64, p1y as i64, p2x as i64, p2y as i64);
+fn render_snow_flake_side_single(p1x: f64, p1y: f64, p2x: f64, p2y: f64, n: i64, mut img: &mut RgbImage){
+    if n == 0{
+        draw_line(&mut img, p1x as i64, p1y as i64, p2x as i64, p2y as i64);
     }
-    else {
+    else{
         let n2 = n - 1;
         let deltax = p2x - p1x;
         let deltay = p2y - p1y;
-        let deltaxper = deltax / (THREE_F);
-        let deltayper = deltay / (THREE_F);
+        let deltaxper = deltax / (3 as f64);
+        let deltayper = deltay / (3 as f64);
+        let mid1x = p1x + deltaxper;
+        let mid1y = p1y + deltayper;
+        let mid2x = p1x + ((2 as f64) * deltaxper);
+        let mid2y = p1y + ((2 as f64) * deltayper);
+        let sqrtof3 = (3 as f64).sqrt();
+        let heightxxsum = (3 as f64) * p1x + (3 as f64) * p2x;
+        let heightxysum = sqrtof3 * p1y - sqrtof3 * p2y;
+        let heightx = (heightxxsum + heightxysum) / (6 as f64);
+        let heightyysum = (3 as f64) * p1y + (3 as f64) * p2y;
+        let heightyxsum = sqrtof3 * p2x - sqrtof3 * p1x;
+        let heighty = (heightyxsum + heightyysum) / (6 as f64);
+        render_snow_flake_side_single(p1x, p1y, mid1x, mid1y, n2, &mut img);
+        render_snow_flake_side_single(mid2x, mid2y, p2x, p2y, n2, &mut img);
+        render_snow_flake_side_single(mid1x, mid1y, heightx, heighty, n2, &mut img);
+        render_snow_flake_side_single(heightx, heighty, mid2x, mid2y, n2, &mut img);
+        //
+    }
+}
+
+fn render_snow_flake_side_multi(p1x: f64, p1y: f64, p2x: f64, p2y: f64, n: i64, arc: Arc<Mutex<RgbImage>>){
+    if n == 0 {
+        let mut img = arc.lock().unwrap();
+        draw_line(&mut *img, p1x as i64, p1y as i64, p2x as i64, p2y as i64);
+    }
+    else {
+        let n2 = n - 1;
+        // let deltax = p2x - p1x;
+        // let deltay = p2y - p1y;
+        let deltaxper = (p2x - p1x) / (THREE_F);
+        let deltayper = (p2y - p1y) / (THREE_F);
         let mid1x = p1x + deltaxper;
         let mid1y = p1y + deltayper;
         let mid2x = p1x + ((TWO_F) * deltaxper);
@@ -60,6 +95,7 @@ fn rendersnowflakeside(p1x: f64, p1y: f64, p2x: f64, p2y: f64, n: i64, img: &mut
         // let heightxxsum = (THREE_F) * p1x + (THREE_F) * p2x;
         let heightxxsum = (THREE_F) * (p1x + p2x);
         // let heightxysum = SQRT_3 * p1y - SQRT_3 * p2y;
+        // let heightxysum = SQRT_3 * (p1y - p2y);
         let heightxysum = SQRT_3 * (p1y - p2y);
         let heightx = (heightxxsum + heightxysum) / (SIX_F);
         // let heightyysum = (THREE_F) * p1y + (THREE_F) * p2y;
@@ -67,44 +103,91 @@ fn rendersnowflakeside(p1x: f64, p1y: f64, p2x: f64, p2y: f64, n: i64, img: &mut
         // let heightyxsum = SQRT_3 * p2x - SQRT_3 * p1x;
         let heightyxsum = SQRT_3 * (p2x - p1x);
         let heighty = (heightyxsum + heightyysum) / (SIX_F);
-        if n > 13 {
+        
+        if n2 > 12 {
+            let h1; let h2; let h3; let h4;
+            // println!("Paralelo {}", n2);
+            // thread::sleep( std :: time :: Duration :: from_millis(10000) );
+            let to_pass = arc.clone(); h1 = std::thread::spawn(move || render_snow_flake_side_multi(p1x, p1y, mid1x, mid1y, n2, to_pass.clone()));
+            let to_pass = arc.clone(); h2 = std::thread::spawn(move || render_snow_flake_side_multi(mid2x, mid2y, p2x, p2y, n2, to_pass.clone()));
+            let to_pass = arc.clone(); h3 = std::thread::spawn(move || render_snow_flake_side_multi(mid1x, mid1y, heightx, heighty, n2, to_pass.clone()));
+            let to_pass = arc.clone(); h4 = std::thread::spawn(move || render_snow_flake_side_multi(heightx, heighty, mid2x, mid2y, n2, to_pass.clone()));
+            h1.join().unwrap(); h2.join().unwrap();
+            h3.join().unwrap(); h4.join().unwrap();
             // usar threads
         }
         else {
-            // let v = vec![p1x, p1y, mid1x, mid1y, n2, mid2x, mid2y, p2x, p2y, n2, mid1x, mid1y, heightx, heighty, n2, heightx, heighty, mid2x, mid2y, n2];
-            rendersnowflakeside(p1x, p1y, mid1x, mid1y, n2, img);
-            rendersnowflakeside(mid2x, mid2y, p2x, p2y, n2, img);
-            rendersnowflakeside(mid1x, mid1y, heightx, heighty, n2, img);
-            rendersnowflakeside(heightx, heighty, mid2x, mid2y, n2, img);
+            // println!("Sequencial {}", n2);
+            // thread::sleep( std :: time :: Duration :: from_millis(10000) );
+            // println!("{:?}", n);
+            let mut img = &mut * (arc.lock().unwrap());
+            render_snow_flake_side_single(p1x, p1y, mid1x, mid1y, n2, &mut img);
+            render_snow_flake_side_single(mid2x, mid2y, p2x, p2y, n2, &mut img);
+            render_snow_flake_side_single(mid1x, mid1y, heightx, heighty, n2, &mut img);
+            render_snow_flake_side_single(heightx, heighty, mid2x, mid2y, n2, &mut img);
+            return;
+            // let mut h = vec![std::thread:::spawn(||)];
+            // for i in 2..5 {
+            //     h.push_back(std::thread:::spawn(||));
+            // }
+            // // let v = vec![p1x, p1y, mid1x, mid1y, n2, mid2x, mid2y, p2x, p2y, n2, mid1x, mid1y, heightx, heighty, n2, heightx, heighty, mid2x, mid2y, n2];
+            // render_snow_flake_side_multi(p1x, p1y, mid1x, mid1y, n2, img);
+            // render_snow_flake_side_multi(mid2x, mid2y, p2x, p2y, n2, img);
+            // render_snow_flake_side_multi(mid1x, mid1y, heightx, heighty, n2, img);
+            // render_snow_flake_side_multi(heightx, heighty, mid2x, mid2y, n2, img);
         }//
     }
 }
 
+fn take_ref_mut_arc(_img: &mut RgbImage){
+    println!("Ha! Passagem bem sucedida");
+}
+
 use std::thread;
-use std::sync::mpsc;  // mpsc: multiple producer, single consumer
+// use std::sync::mpsc;  // mpsc: multiple producer, single consumer
 use std::sync::{Arc, Mutex};
 
 fn main() {
 	let rezscale = 10;
     let mut img = RgbImage::new(640 * rezscale, 480 * rezscale);
-
-    let data = Arc::new(Mutex::new(img.clone()));
-    // println!("{:?}", data);
     let rezscale = rezscale as f64;  // nao precisa mas do valor inteiro
-    let nrec = 13;
-    // rendersnowflakeside(270.0, 211.13249, 320.0, 297.73503, nrec, &mut img);
-    // println!("one side done!");
-    // rendersnowflakeside(370.0, 211.13249, 270.0, 211.13249, nrec, &mut img);
-    // println!("one side done!");
-    // rendersnowflakeside(320.0, 297.73503, 370.0, 211.13249, nrec, &mut img);
-    // println!("one side done!");
-    rendersnowflakeside(270.0 * rezscale, 211.13249 * rezscale, 320.0 * rezscale, 297.73503 * rezscale, nrec, &mut img);
+    let nrec = 17;
+    println!("Recursoes: {}", nrec);
+    let arc = Arc::new( Mutex::new(img) );      // preparando para as threads
+
+    // let mut _img = RgbImage::new(640 * rezscale, 480 * rezscale);
+
+    // take_ref_mut_arc(&mut (* (arc.lock().unwrap())) );
+    // return;
+    // let data = Arc::new(Mutex::new(img.clone()));
+    // println!("{:?}", data);
+    let to_pass = arc.clone();
+
+
+    let h1 = thread::spawn(move || {
+        render_snow_flake_side_multi(270.0 * rezscale, 211.13249 * rezscale, 320.0 * rezscale, 297.73503 * rezscale, nrec, to_pass.clone()/*Arc::clone(&arc)*/ );
+    });
+
+    let to_pass = arc.clone();
+    let h2 = thread::spawn(move || {
+        render_snow_flake_side_multi(370.0 * rezscale, 211.13249 * rezscale, 270.0 * rezscale, 211.13249 * rezscale, nrec, to_pass.clone()/*Arc::clone(&arc)*/ );
+    });
+    let to_pass = arc.clone();
+    let h3 = thread::spawn(move || {
+        render_snow_flake_side_multi(320.0 * rezscale, 297.73503 * rezscale, 370.0 * rezscale, 211.13249 * rezscale, nrec, to_pass.clone()/*Arc::clone(&arc)*/ );
+    });
+
+    
+    h1.join().unwrap();
     println!("one side done!");
-    rendersnowflakeside(370.0 * rezscale, 211.13249 * rezscale, 270.0 * rezscale, 211.13249 * rezscale, nrec, &mut img);
+    
+    h2.join().unwrap();
     println!("one side done!");
-    rendersnowflakeside(320.0 * rezscale, 297.73503 * rezscale, 370.0 * rezscale, 211.13249 * rezscale, nrec, &mut img);
+    
+    h3.join().unwrap();
     println!("one side done!");
+
     println!("Vai escrever...");
-    img.save("output.png").unwrap();
+    (*(arc.lock().unwrap())).save("output.png").unwrap();
     println!("Escreveu");
 }
