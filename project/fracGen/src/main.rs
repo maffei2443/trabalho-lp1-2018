@@ -4,7 +4,15 @@ use image::RgbImage;
 
 const SIX_F: f64 = 6 as f64;
 const THREE_F: f64 = 3 as f64;
-const TWO_F: f64 = 2.0 as f64;
+#[allow(dead_code)]
+const NINE_F: f64 = 9 as f64;
+#[allow(dead_code)]
+const TWELVE_F: f64 = 9 as f64;
+const TWO_F: f64 = 2 as f64;
+
+const SEN60: f64 = 0.8660254037;
+const COS60: f64 = 0.5;
+
 // let SQRT_3: f64 = (3 as f64).sqrt();
 
 fn draw_line(img: &mut RgbImage, x0: i64, y0: i64, x1: i64, y1: i64) {
@@ -28,6 +36,9 @@ fn draw_line(img: &mut RgbImage, x0: i64, y0: i64, x1: i64, y1: i64) {
     loop {
         // Set pixel
         img.get_pixel_mut(x0 as u32, y0 as u32).data = [255, 255, 255];
+        // falta fazer a transformacao linear!
+        // img.get_pixel_mut( (x0 as f64 *COS60 - y0 as f64 *SEN60 ) as u32, ( y0 as f64 *COS60 + x0 as f64 *SEN60) as u32).data = [255, 255, 255];
+        // img.get_pixel_mut(x0 as u32, y0 as u32).data = [255, 255, 255];
 
         // Check end condition
         if x0 == x1 && y0 == y1 { break };
@@ -144,11 +155,12 @@ fn render_snow_flake_side_multi(p1x: f64, p1y: f64, p2x: f64, p2y: f64, n: i64, 
 use std::thread;
 // use std::sync::mpsc;  // mpsc: multiple producer, single consumer
 use std::sync::{Arc, Mutex};
-
+const X_F: f64 = 1 as f64;
 fn main() {
-	for &rezscale in [40, 60,  80].iter() {
-	    for i in 15..18 {
-	        let img = RgbImage::new(640 * rezscale, 480 * rezscale);
+	let x = 8;
+	for &rezscale in [10].iter() {
+	    for i in x..(x+5) {
+	        let img = RgbImage::new(640 * ( rezscale as f64 / X_F).ceil() as u32, 480 * (rezscale as f64 / X_F ).ceil() as u32);
 	        println!("rezscale: {}", rezscale);
 	        let rezscale_int = rezscale;
 	        let rezscale = rezscale as f64;  // nao precisa mas do valor inteiro
@@ -162,17 +174,19 @@ fn main() {
 	        let to_pass = arc.clone();
 
 	        let pot4 = 2;
-	        let h1 = thread::spawn(move || {
-	            render_snow_flake_side_multi(270.0 * rezscale, 211.13249 * rezscale, 320.0 * rezscale, 297.73503 * rezscale, nrec, to_pass.clone()/*Arc::clone(&arc)*/, pot4);
-	        });
+            let to_pass = arc.clone();
+            let h1 = thread::spawn(move || {
+                 render_snow_flake_side_multi(270.0 * rezscale/X_F, 211.13249 * rezscale/X_F, 320.0 * rezscale/X_F, 297.73503 * rezscale/X_F, nrec, to_pass.clone()/*Arc::clone(&arc)*/, pot4);
+            });
 
 	        let to_pass = arc.clone();
-	        let h2 = thread::spawn(move || {
-	            render_snow_flake_side_multi(370.0 * rezscale, 211.13249 * rezscale, 270.0 * rezscale, 211.13249 * rezscale, nrec, to_pass.clone()/*Arc::clone(&arc)*/, pot4 );
-	        });
-	        let to_pass = arc.clone();
+            
+            let h2 = thread::spawn(move || {
+                render_snow_flake_side_multi(370.0 * rezscale/X_F, 211.13249 * rezscale/X_F, 270.0 * rezscale/X_F, 211.13249 * rezscale/X_F, nrec, to_pass.clone()/*Arc::clone(&arc)*/, pot4 );
+            });
+	        
 	        let h3 = thread::spawn(move || {
-	            render_snow_flake_side_multi(320.0 * rezscale, 297.73503 * rezscale, 370.0 * rezscale, 211.13249 * rezscale, nrec, to_pass.clone()/*Arc::clone(&arc)*/ , pot4);
+	             render_snow_flake_side_multi(320.0 * rezscale/X_F, 297.73503 * rezscale/X_F, 370.0 * rezscale/X_F, 211.13249 * rezscale/X_F, nrec, to_pass.clone()/*Arc::clone(&arc)*/ , pot4);
 	        });
 
 	        
@@ -186,7 +200,7 @@ fn main() {
 	        println!("one side done!");
 
 	        println!("Vai escrever...");
-	        (*(arc.lock().unwrap())).save(rezscale_int.to_string() + &nrec.to_string() +"output.png").unwrap();
+	        (*(arc.lock().unwrap())).save(rezscale_int.to_string()+ "_"  + &nrec.to_string() + "_"+ &X_F.to_string() +"outputt2.png").unwrap();
 	        println!("Escreveu");
 	    }
 	}
