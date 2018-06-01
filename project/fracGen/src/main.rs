@@ -10,10 +10,10 @@ const NINE_F: f64 = 9 as f64;
 const TWELVE_F: f64 = 9 as f64;
 const TWO_F: f64 = 2 as f64;
 
-const SEN60: f64 = 0.8660254037;
-const COS60: f64 = 0.5;
+// const SEN60: f64 = 0.8660254037;
+// const COS60: f64 = 0.5;
 
-// let SQRT_3: f64 = (3 as f64).sqrt();
+// let sqrt_3: f64 = (3 as f64).sqrt();
 
 fn draw_line(img: &mut RgbImage, x0: i64, y0: i64, x1: i64, y1: i64) {
 
@@ -102,17 +102,17 @@ fn render_snow_flake_side_multi(p1x: f64, p1y: f64, p2x: f64, p2y: f64, n: i64, 
         let mid1y = p1y + deltayper;
         let mid2x = p1x + ((TWO_F) * deltaxper);
         let mid2y = p1y + ((TWO_F) * deltayper);
-        let SQRT_3 = (THREE_F).sqrt();
+        let sqrt_3 = (THREE_F).sqrt();
         // let heightxxsum = (THREE_F) * p1x + (THREE_F) * p2x;
         let heightxxsum = (THREE_F) * (p1x + p2x);
-        // let heightxysum = SQRT_3 * p1y - SQRT_3 * p2y;
-        // let heightxysum = SQRT_3 * (p1y - p2y);
-        let heightxysum = SQRT_3 * (p1y - p2y);
+        // let heightxysum = sqrt_3 * p1y - sqrt_3 * p2y;
+        // let heightxysum = sqrt_3 * (p1y - p2y);
+        let heightxysum = sqrt_3 * (p1y - p2y);
         let heightx = (heightxxsum + heightxysum) / (SIX_F);
         // let heightyysum = (THREE_F) * p1y + (THREE_F) * p2y;
         let heightyysum = (THREE_F) * (p1y + p2y);
-        // let heightyxsum = SQRT_3 * p2x - SQRT_3 * p1x;
-        let heightyxsum = SQRT_3 * (p2x - p1x);
+        // let heightyxsum = sqrt_3 * p2x - sqrt_3 * p1x;
+        let heightyxsum = sqrt_3 * (p2x - p1x);
         let heighty = (heightyxsum + heightyysum) / (SIX_F);
         
         if pot4 > 0 {
@@ -157,10 +157,12 @@ use std::thread;
 use std::sync::{Arc, Mutex};
 const X_F: f64 = 1 as f64;
 fn main() {
-	let x = 8;
+	let x = 16;
+    let y = 1;
 	for &rezscale in [10].iter() {
-	    for i in x..(x+5) {
-	        let img = RgbImage::new(640 * ( rezscale as f64 / X_F).ceil() as u32, 480 * (rezscale as f64 / X_F ).ceil() as u32);
+	    for i in x..(x+y) {
+            // let img = RgbImage::new(640 * ( rezscale as f64 / X_F).ceil() as u32, 480 * (rezscale as f64 / X_F ).ceil() as u32);
+	        let img = RgbImage::new(640 * rezscale, 480 * rezscale);
 	        println!("rezscale: {}", rezscale);
 	        let rezscale_int = rezscale;
 	        let rezscale = rezscale as f64;  // nao precisa mas do valor inteiro
@@ -171,36 +173,38 @@ fn main() {
 	        // let mut _img = RgbImage::new(640 * rezscale, 480 * rezscale);
 
 	        // let data = Arc::new(Mutex::new(img.clone()));
-	        let to_pass = arc.clone();
+	        // let to_pass = arc.clone();
 
-	        let pot4 = 2;
+	        let pot4 = 0;
             let to_pass = arc.clone();
             let h1 = thread::spawn(move || {
-                 render_snow_flake_side_multi(270.0 * rezscale/X_F, 211.13249 * rezscale/X_F, 320.0 * rezscale/X_F, 297.73503 * rezscale/X_F, nrec, to_pass.clone()/*Arc::clone(&arc)*/, pot4);
+                 render_snow_flake_side_multi(270.0 * rezscale, 211.13249 * rezscale, 320.0 * rezscale, 297.73503 * rezscale, nrec, to_pass.clone()/*Arc::clone(&arc)*/, pot4);
             });
 
 	        let to_pass = arc.clone();
             
             let h2 = thread::spawn(move || {
-                render_snow_flake_side_multi(370.0 * rezscale/X_F, 211.13249 * rezscale/X_F, 270.0 * rezscale/X_F, 211.13249 * rezscale/X_F, nrec, to_pass.clone()/*Arc::clone(&arc)*/, pot4 );
+                render_snow_flake_side_multi(370.0 * rezscale, 211.13249 * rezscale, 270.0 * rezscale, 211.13249 * rezscale, nrec, to_pass.clone()/*Arc::clone(&arc)*/, pot4 );
             });
 	        
+            let to_pass = arc.clone();
+
 	        let h3 = thread::spawn(move || {
-	             render_snow_flake_side_multi(320.0 * rezscale/X_F, 297.73503 * rezscale/X_F, 370.0 * rezscale/X_F, 211.13249 * rezscale/X_F, nrec, to_pass.clone()/*Arc::clone(&arc)*/ , pot4);
+	             render_snow_flake_side_multi(320.0 * rezscale, 297.73503 * rezscale, 370.0 * rezscale, 211.13249 * rezscale, nrec, to_pass.clone()/*Arc::clone(&arc)*/ , pot4);
 	        });
 
 	        
 	        h1.join().unwrap();
-	        println!("one side done!");
+	        println!("h1 done!");
 	        
 	        h2.join().unwrap();
-	        println!("one side done!");
+	        println!("h2 done!");
 	        
 	        h3.join().unwrap();
-	        println!("one side done!");
+	        println!("h3 done!");
 
 	        println!("Vai escrever...");
-	        (*(arc.lock().unwrap())).save(rezscale_int.to_string()+ "_"  + &nrec.to_string() + "_"+ &X_F.to_string() +"outputt2.png").unwrap();
+	        (*(arc.lock().unwrap())).save(rezscale_int.to_string()+ "_"  + &nrec.to_string() + "_"+ &X_F.to_string() +"output.png").unwrap();
 	        println!("Escreveu");
 	    }
 	}
