@@ -1,6 +1,8 @@
 tmp/
-/project/fracGen/target/*
-/project/fracSeq/*
+/project/fracGen/target
+/project/fracGen/*.png
+/project/fracSeq/target
+/project/fracSeq/*.png
 /project/*.tar.xz
 *.png
 /*.png
