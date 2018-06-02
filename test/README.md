@@ -1,1 +1,0 @@
-This directory is exclusively made to contain *whatever* code any of the we'd like to test, see if it works, tihngs liek that.
