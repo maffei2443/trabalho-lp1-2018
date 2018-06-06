@@ -107,7 +107,7 @@ use std::thread;
 // use std::sync::mpsc;  // mpsc: multiple producer, single consumer
 use std::sync::{Arc, Mutex};
 fn main() {
-    let x = 13;  // NAO AUMMENTAR! 
+    let x = 13;  // NAO COLOCAR MAIOR QUE 13! 
     let y = 1;
 	for &rezscale in [10].iter() {
 	    for i in x..(x+y) {
@@ -119,7 +119,7 @@ fn main() {
 	        println!("Recursoes: {}", nrec);
             let arc1 = Arc::new( Mutex::new( Vec::new() ) );      // preparando para as threads
             let arc2 = Arc::new( Mutex::new( Vec::new() ) );      // preparando para as threads
-	        let arc3 = Arc::new( Mutex::new( Vec::new() ) );      // preparando para as threads
+	    let arc3 = Arc::new( Mutex::new( Vec::new() ) );      // preparando para as threads
 
 	        // let mut _img = RgbImage::new(640 * rezscale, 480 * rezscale);
 
@@ -145,22 +145,24 @@ fn main() {
 
 	        
 	        h1.join().unwrap();	        println!("h1 done!");
-	        
-	        h2.join().unwrap();	        println!("h2 done!");
-	        
-	        h3.join().unwrap();	        println!("h3 done!");
-
             let v1 = &*arc1.lock().unwrap();
-            let v2 = &*arc2.lock().unwrap();
-            let v3 = &*arc3.lock().unwrap();
-
             for i in v1.iter() {
                 img.get_pixel_mut(i.x as u32, i.y as u32).data = [255, 255, 255];
             }
-
+            
+            
+            h2.join().unwrap();         println!("h2 done!");
+            let v2 = &*arc2.lock().unwrap();
             for i in v2.iter() {
              img.get_pixel_mut(i.x as u32, i.y as u32).data = [255, 255, 255];   
             }
+            
+            
+            h3.join().unwrap();         println!("h3 done!");
+            let v3 = &*arc3.lock().unwrap();
+
+
+
 
             for i in v3.iter() {
                 img.get_pixel_mut(i.x as u32, i.y as u32).data = [255, 255, 255];
