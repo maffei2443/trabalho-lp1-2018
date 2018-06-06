@@ -2,19 +2,6 @@ extern crate image;
 
 use image::RgbImage;
 
-const SIX_F: f64 = 6 as f64;
-const THREE_F: f64 = 3 as f64;
-#[allow(dead_code)]
-const NINE_F: f64 = 9 as f64;
-#[allow(dead_code)]
-const TWELVE_F: f64 = 9 as f64;
-const TWO_F: f64 = 2 as f64;
-
-// const SEN60: f64 = 0.8660254037;
-// const COS60: f64 = 0.5;
-
-// let sqrt_3: f64 = (3 as f64).sqrt();
-
 struct Point<T> {
     x: T,
     y: T
@@ -54,6 +41,9 @@ fn draw_line(vet: &mut Vec<Point<u32>>, mut x0: i64, mut y0: i64, x1: i64, y1: i
     loop {
         // Set pixel
         vet.push(Point::new(x0 as u32, y0 as u32));
+        // img.get_pixel_mut(x0 as u32, y0 as u32).data = [255, 255, 255];
+        // falta fazer a transformacao linear!
+        // img.get_pixel_mut( (x0 as f64 *COS60 - y0 as f64 *SEN60 ) as u32, ( y0 as f64 *COS60 + x0 as f64 *SEN60) as u32).data = [255, 255, 255];
         // img.get_pixel_mut(x0 as u32, y0 as u32).data = [255, 255, 255];
 
         // Check end condition
@@ -103,55 +93,81 @@ fn render_snow_flake_side(p1x: f64, p1y: f64, p2x: f64, p2y: f64, n: i64,  vet: 
         //
     }
 }
+
+fn render_snow_flake_side_pre(p1x: f64, p1y: f64, p2x: f64, p2y: f64, n: i64, arc: Arc<Mutex<Vec<Point<u32>>>>){
+    let mut vet = &mut *arc.lock().unwrap();
+    render_snow_flake_side(p1x, p1y, p2x, p2y, n, &mut vet);
+}
+
+// fn take_ref_mut_arc(_img: &mut RgbImage){
+//     println!("Ha! Passagem bem sucedida");
+// }
+
 use std::thread;
 // use std::sync::mpsc;  // mpsc: multiple producer, single consumer
 use std::sync::{Arc, Mutex};
-const X_F: f64 = 1 as f64;
 fn main() {
-	let x = 16;
+    let x = 13;  // NAO AUMMENTAR! 
     let y = 1;
 	for &rezscale in [10].iter() {
 	    for i in x..(x+y) {
-            // let img = RgbImage::new(640 * ( rezscale as f64 / X_F).ceil() as u32, 480 * (rezscale as f64 / X_F ).ceil() as u32);
-	        let img = RgbImage::new(640 * rezscale, 480 * rezscale);
+	        let mut img = RgbImage::new(640 * rezscale, 480 * rezscale);
 	        println!("rezscale: {}", rezscale);
 	        let rezscale_int = rezscale;
 	        let rezscale = rezscale as f64;  // nao precisa mas do valor inteiro
 	        let nrec = i;
 	        println!("Recursoes: {}", nrec);
-	        let arc = Arc::new( Mutex::new(img) );      // preparando para as threads
+            let arc1 = Arc::new( Mutex::new( Vec::new() ) );      // preparando para as threads
+            let arc2 = Arc::new( Mutex::new( Vec::new() ) );      // preparando para as threads
+	        let arc3 = Arc::new( Mutex::new( Vec::new() ) );      // preparando para as threads
 
 	        // let mut _img = RgbImage::new(640 * rezscale, 480 * rezscale);
 
 	        // let data = Arc::new(Mutex::new(img.clone()));
 	        // let to_pass = arc.clone();
-            let mut side1:Vec<Point<u32>> = vec![];
+
+            let to_pass = arc1.clone();
             let h1 = thread::spawn(move || {
-                 render_snow_flake_side(270.0 * rezscale, 211.13249 * rezscale, 320.0 * rezscale, 297.73503 * rezscale, nrec, &mut side1/*Arc::clone(&arc)*/);
+                 render_snow_flake_side_pre(270.0 * rezscale, 211.13249 * rezscale, 320.0 * rezscale, 297.73503 * rezscale, nrec, to_pass.clone());
             });
 
-            let mut side2:Vec<Point<u32>> = vec![];
+	        let to_pass = arc2.clone();
+            
             let h2 = thread::spawn(move || {
-                render_snow_flake_side(370.0 * rezscale, 211.13249 * rezscale, 270.0 * rezscale, 211.13249 * rezscale, nrec, &mut side2/*Arc::clone(&arc)*/ );
+                render_snow_flake_side_pre(370.0 * rezscale, 211.13249 * rezscale, 270.0 * rezscale, 211.13249 * rezscale, nrec, to_pass.clone() );
             });
+	        
+            let to_pass = arc3.clone();
 
-            let mut side3:Vec<Point<u32>> = vec![];
 	        let h3 = thread::spawn(move || {
-	             render_snow_flake_side(320.0 * rezscale, 297.73503 * rezscale, 370.0 * rezscale, 211.13249 * rezscale, nrec, &mut side3/*Arc::clone(&arc)*/ );
+	             render_snow_flake_side_pre(320.0 * rezscale, 297.73503 * rezscale, 370.0 * rezscale, 211.13249 * rezscale, nrec, to_pass.clone());
 	        });
 
 	        
-	        h1.join().unwrap();
-	        println!("h1 done!");
+	        h1.join().unwrap();	        println!("h1 done!");
 	        
-	        h2.join().unwrap();
-	        println!("h2 done!");
+	        h2.join().unwrap();	        println!("h2 done!");
 	        
-	        h3.join().unwrap();
-	        println!("h3 done!");
+	        h3.join().unwrap();	        println!("h3 done!");
+
+            let v1 = &*arc1.lock().unwrap();
+            let v2 = &*arc2.lock().unwrap();
+            let v3 = &*arc3.lock().unwrap();
+
+            for i in v1.iter() {
+                img.get_pixel_mut(i.x as u32, i.y as u32).data = [255, 255, 255];
+            }
+
+            for i in v2.iter() {
+             img.get_pixel_mut(i.x as u32, i.y as u32).data = [255, 255, 255];   
+            }
+
+            for i in v3.iter() {
+                img.get_pixel_mut(i.x as u32, i.y as u32).data = [255, 255, 255];
+            }
 
 	        println!("Vai escrever...");
-	        (*(arc.lock().unwrap())).save(rezscale_int.to_string()+ "_"  + &nrec.to_string() + "_"+ &X_F.to_string() +"output.png").unwrap();
+	        img.save(rezscale_int.to_string()+ "_"  + &nrec.to_string() + "_output.png").unwrap();
 	        println!("Escreveu");
 	    }
 	}

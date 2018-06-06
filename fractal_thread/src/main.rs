@@ -159,7 +159,7 @@ use std::thread;
 use std::sync::{Arc, Mutex};
 const X_F: f64 = 1 as f64;
 fn main() {
-	let x = 16;
+    let x = 13;
     let y = 1;
 	for &rezscale in [10].iter() {
 	    for i in x..(x+y) {
