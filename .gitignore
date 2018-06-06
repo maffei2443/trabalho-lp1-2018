@@ -3,6 +3,8 @@ tmp/
 /fractal_thread/target
 /fractal_seq/*.png
 /fractal_seq/target/
+/fractal_fast/target/
+/fractal_fast/src/*.png
 
 /project/*.tar.xz
 *.png
