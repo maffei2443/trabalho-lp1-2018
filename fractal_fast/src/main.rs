@@ -1,30 +1,12 @@
 extern crate image;
 
+use std::time::{SystemTime, UNIX_EPOCH};
 use image::RgbImage;
+const rezscale : i32 = 1;
+const globx : usize = (640 * rezscale) as usize;
+const globy : usize = (480 * rezscale) as usize;
 
-struct Point<T> {
-    x: T,
-    y: T
-}
-
-impl<T> Point<T> {
-    fn new(x: T, y: T) -> Point<T> {
-        Point { x, y }
-    }
-}
-use std::fmt;
-
-impl<T: fmt::Display> fmt::Display for Point<T> {
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(formatter, "x: {}, y: {}", self.x, self.y)  // coloca dados no buffer
-    }
-}
-
-fn draw_line(vet: &mut Vec<Point<u32>>, mut x0: i64, mut y0: i64, x1: i64, y1: i64) {
-
-    // Create local variables for moving start point
-    // let mut x0 = x0;
-    // let mut y0 = y0;
+fn draw_line(mat: &mut [[bool; globx]; globy], mut x0: i64, mut y0: i64, x1: i64, y1: i64) {
 
     // Get absolute x/y offset
     let dx = if x0 > x1 { x0 - x1 } else { x1 - x0 };
@@ -39,12 +21,7 @@ fn draw_line(vet: &mut Vec<Point<u32>>, mut x0: i64, mut y0: i64, x1: i64, y1: i
     let mut err2;
 
     loop {
-        // Set pixel
-        vet.push(Point::new(x0 as u32, y0 as u32));
-        // img.get_pixel_mut(x0 as u32, y0 as u32).data = [255, 255, 255];
-        // falta fazer a transformacao linear!
-        // img.get_pixel_mut( (x0 as f64 *COS60 - y0 as f64 *SEN60 ) as u32, ( y0 as f64 *COS60 + x0 as f64 *SEN60) as u32).data = [255, 255, 255];
-        // img.get_pixel_mut(x0 as u32, y0 as u32).data = [255, 255, 255];
+        mat[y0 as usize][x0 as usize]=true;
 
         // Check end condition
         if x0 == x1 && y0 == y1 { break };
@@ -58,15 +35,9 @@ fn draw_line(vet: &mut Vec<Point<u32>>, mut x0: i64, mut y0: i64, x1: i64, y1: i
     }
 }
 
-// TODO: refatorar o cohdigo pra usar enum
-// enum Gambs {
-//     arc(Arc<Mutex<RgbImage>>),
-//     img(&mut RgbImage)
-// }
-
-fn render_snow_flake_side(p1x: f64, p1y: f64, p2x: f64, p2y: f64, n: i64,  vet: &mut Vec<Point<u32>>){
+fn render_snow_flake_side(p1x: f64, p1y: f64, p2x: f64, p2y: f64, n: i64,  mat: &mut [[bool; globx]; globy]){
     if n == 0{
-        draw_line(vet, p1x as i64, p1y as i64, p2x as i64, p2y as i64);
+        draw_line(mat, p1x as i64, p1y as i64, p2x as i64, p2y as i64);
     }
     else{
         let n2 = n - 1;
@@ -86,91 +57,75 @@ fn render_snow_flake_side(p1x: f64, p1y: f64, p2x: f64, p2y: f64, n: i64,  vet: 
         let heightyxsum = sqrtof3 * p2x - sqrtof3 * p1x;
         let heighty = (heightyxsum + heightyysum) / (6 as f64);
 
-        render_snow_flake_side(p1x, p1y, mid1x, mid1y, n2, vet);
-        render_snow_flake_side(mid2x, mid2y, p2x, p2y, n2, vet);
-        render_snow_flake_side(mid1x, mid1y, heightx, heighty, n2, vet);
-        render_snow_flake_side(heightx, heighty, mid2x, mid2y, n2, vet);
+        render_snow_flake_side(p1x, p1y, mid1x, mid1y, n2, mat);
+        render_snow_flake_side(mid2x, mid2y, p2x, p2y, n2, mat);
+        render_snow_flake_side(mid1x, mid1y, heightx, heighty, n2, mat);
+        render_snow_flake_side(heightx, heighty, mid2x, mid2y, n2, mat);
         //
     }
 }
 
-fn render_snow_flake_side_pre(p1x: f64, p1y: f64, p2x: f64, p2y: f64, n: i64, arc: Arc<Mutex<Vec<Point<u32>>>>){
-    let mut vet = &mut *arc.lock().unwrap();
-    render_snow_flake_side(p1x, p1y, p2x, p2y, n, &mut vet);
+fn render_snow_flake_side_pre(p1x: f64, p1y: f64, p2x: f64, p2y: f64, n: i64, arc: Arc<Mutex<[[bool; globx]; globy]>>){
+    let mut mat = &mut *arc.lock().unwrap();
+    render_snow_flake_side(p1x, p1y, p2x, p2y, n, &mut mat);
 }
-
-// fn take_ref_mut_arc(_img: &mut RgbImage){
-//     println!("Ha! Passagem bem sucedida");
-// }
 
 use std::thread;
 // use std::sync::mpsc;  // mpsc: multiple producer, single consumer
 use std::sync::{Arc, Mutex};
 fn main() {
-    let x = 13;  // NAO COLOCAR MAIOR QUE 13! 
-    let y = 1;
-	for &rezscale in [10].iter() {
-	    for i in x..(x+y) {
-	        let mut img = RgbImage::new(640 * rezscale, 480 * rezscale);
-	        println!("rezscale: {}", rezscale);
-	        let rezscale_int = rezscale;
-	        let rezscale = rezscale as f64;  // nao precisa mas do valor inteiro
-	        let nrec = i;
-	        println!("Recursoes: {}", nrec);
-            let arc1 = Arc::new( Mutex::new( Vec::new() ) );      // preparando para as threads
-            let arc2 = Arc::new( Mutex::new( Vec::new() ) );      // preparando para as threads
-	    let arc3 = Arc::new( Mutex::new( Vec::new() ) );      // preparando para as threads
+    let systime = SystemTime::now();
+    let nrec = 15;  // NAO AUMMENTAR!
+    let mut img = RgbImage::new(globx as u32, globy as u32);
+    println!("rezscale: {}", rezscale);
+    let rezscale_int = rezscale;
+    let rezscalef = rezscale as f64;  // nao precisa mas do valor inteiro
+    println!("Recursoes: {}", nrec);
+    let arc1 = Arc::new( Mutex::new( [[false; globx]; globy] ) );      // preparando para as threads
+    let arc2 = Arc::new( Mutex::new( [[false; globx]; globy] ) );      // preparando para as threads
+    let arc3 = Arc::new( Mutex::new( [[false; globx]; globy] ) );      // preparando para as threads
 
-	        // let mut _img = RgbImage::new(640 * rezscale, 480 * rezscale);
+    let to_pass = arc1.clone();
+    let h1 = thread::spawn(move || {
+        render_snow_flake_side_pre(270.0 * rezscalef, 211.13249 * rezscalef, 320.0 * rezscalef, 297.73503 * rezscalef, nrec, to_pass.clone());
+    });
 
-	        // let data = Arc::new(Mutex::new(img.clone()));
-	        // let to_pass = arc.clone();
-
-            let to_pass = arc1.clone();
-            let h1 = thread::spawn(move || {
-                 render_snow_flake_side_pre(270.0 * rezscale, 211.13249 * rezscale, 320.0 * rezscale, 297.73503 * rezscale, nrec, to_pass.clone());
-            });
-
-	        let to_pass = arc2.clone();
+    let to_pass = arc2.clone();
             
-            let h2 = thread::spawn(move || {
-                render_snow_flake_side_pre(370.0 * rezscale, 211.13249 * rezscale, 270.0 * rezscale, 211.13249 * rezscale, nrec, to_pass.clone() );
-            });
-	        
-            let to_pass = arc3.clone();
+    let h2 = thread::spawn(move || {
+        render_snow_flake_side_pre(370.0 * rezscalef, 211.13249 * rezscalef, 270.0 * rezscalef, 211.13249 * rezscalef, nrec, to_pass.clone() );
+    });
+            
+    let to_pass = arc3.clone();
 
-	        let h3 = thread::spawn(move || {
-	             render_snow_flake_side_pre(320.0 * rezscale, 297.73503 * rezscale, 370.0 * rezscale, 211.13249 * rezscale, nrec, to_pass.clone());
-	        });
+    let h3 = thread::spawn(move || {
+        render_snow_flake_side_pre(320.0 * rezscalef, 297.73503 * rezscalef, 370.0 * rezscalef, 211.13249 * rezscalef, nrec, to_pass.clone());
+    });
 
-	        
-	        h1.join().unwrap();	        println!("h1 done!");
-            let v1 = &*arc1.lock().unwrap();
-            for i in v1.iter() {
-                img.get_pixel_mut(i.x as u32, i.y as u32).data = [255, 255, 255];
+            
+    h1.join().unwrap();         println!("h1 done!");
+            
+    h2.join().unwrap();         println!("h2 done!");
+            
+    h3.join().unwrap();         println!("h3 done!");
+
+    let m1 = &*arc1.lock().unwrap();
+    let m2 = &*arc2.lock().unwrap();
+    let m3 = &*arc3.lock().unwrap();
+
+    for x in 0..globx {
+        for y in 0..globy{
+            if m1[y][x] || m2[y][x] || m3[y][x]{
+                img.get_pixel_mut(x as u32, y as u32).data = [255, 255, 255];
             }
-            
-            
-            h2.join().unwrap();         println!("h2 done!");
-            let v2 = &*arc2.lock().unwrap();
-            for i in v2.iter() {
-             img.get_pixel_mut(i.x as u32, i.y as u32).data = [255, 255, 255];   
-            }
-            
-            
-            h3.join().unwrap();         println!("h3 done!");
-            let v3 = &*arc3.lock().unwrap();
+        }
+    }
 
-
-
-
-            for i in v3.iter() {
-                img.get_pixel_mut(i.x as u32, i.y as u32).data = [255, 255, 255];
-            }
-
-	        println!("Vai escrever...");
-	        img.save(rezscale_int.to_string()+ "_"  + &nrec.to_string() + "_output.png").unwrap();
-	        println!("Escreveu");
-	    }
-	}
+    println!("Vai escrever...");
+    img.save(rezscale_int.to_string()+ "_"  + &nrec.to_string() + "_output.png").unwrap();
+    println!("Escreveu");
+    let newtime = SystemTime::now();
+    let since_the_epoch = newtime.duration_since(systime)
+        .expect("Time went backwards");
+    println!("{:?}", since_the_epoch);
 }
