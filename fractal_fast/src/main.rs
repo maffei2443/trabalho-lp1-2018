@@ -2,6 +2,8 @@ extern crate image;
 
 use std::time::{SystemTime, UNIX_EPOCH};
 use image::RgbImage;
+#![allow(non_upper_case_globals)]
+
 const rezscale : i32 = 1;
 const globx : usize = (640 * rezscale) as usize;
 const globy : usize = (480 * rezscale) as usize;
