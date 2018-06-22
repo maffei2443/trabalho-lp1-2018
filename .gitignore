@@ -1,0 +1,13 @@
+tmp/
+/fractal_thread/*.png
+/fractal_thread/target
+/fractal_seq/*.png
+/fractal_seq/target/
+/fractal_fast/target/
+/fractal_fast/src/*.png
+
+/project/*.tar.xz
+*.png
+/*.png
+/*/.png
+comparison_tests/*/target
