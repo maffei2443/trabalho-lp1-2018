@@ -12,8 +12,8 @@ tmp/
 /*/.png
 comparison_tests/*/target
 test/*.exe
-test/13_functional
-test/35_control_flow
-test/6_enums_pattern_matching
-test/7_modules
-test/8_common_collections
+**/target
+**/**/target
+**/**/**/target
+**/**/**/**/target
+test/**/target
