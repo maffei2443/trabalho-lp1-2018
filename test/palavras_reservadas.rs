@@ -20,6 +20,9 @@ fn main() {
     // this will give an error: pattern does not mention field `x`
     // let Foo { y } = foo;
     let i32:i32 = 99;
-    let a:i32 = 100;
-    println!("{}", a);
+    let i64:i32 = 90;
+    // let fn:i32 = "fn";
+    println!("i32: {:?}", i32);
+    println!("i64: {:?}", i64);
+    // println!("fn: {:?}", fn);
 }
