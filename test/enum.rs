@@ -15,7 +15,7 @@ enum IPvX_integrated {
 //   Some(T),
 //   None,
 // }
-
+#[derive(Debug)]
 struct IP {
   version: IPvX,
   addr: String,
@@ -31,7 +31,7 @@ fn main() {
   let mut homeIP = IP{ version: IPvX::v4, addr: String::from("127.0.0.1") };
   println!("{:?}", four);
   println!("{:?}", six);
-  // println!("{:?}", homeIP);
+  println!("{:?}", homeIP);
   let x: Option<i32> = None;
   println!("{:?}", x);
 }
