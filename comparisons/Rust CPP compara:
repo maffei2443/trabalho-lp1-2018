@@ -1,0 +1,14 @@
+Rust CPP compara:
+
+Rust:
+	Custo:
+		devido as "0 cost abstractions", e eficiencia do compilador, rust é uma linguagem de baixo custo de treinamento, manutenção, execucao e escrita. em execucao, os programas feitos em rust tem a tendencia de se assemelhar aos escritos em C em eficiencia. embora seja comum os programadores demorarem um pouco a se acostumar com os conceitos de "ownership" e "borrowing", o grande nivel das abstracoes que a linguagem permite torna ela de mais facil aprendizado do que seus competidores (C e C++) embora não seja tão fácil de aprender quanto python e outras. Um programa de C de varias linhas muitas vezes pode ser escrito em Rust com apenas uma linha, devido as "0 cost abstractions", possibilitando um alto poder de escrita, e, junto com a boa legibilidade da linguagem, reduzindo também o custo de manutencao.
+
+	Confiabilidade:
+		Rust é uma linguagem altamente confiavel. os conceitos de "ownership" e "borrowing" permitem praticamente anular problemas de aliasing, tudo isso ainda a tempo de compilacao, impedindo que erros comuns em C e C++ como segmentation faults ocorram facilmente em um programa em rust. esses conceitos tambem auxiliam no combate a data races no caso de programacao concorrente, pois o proprio compilador é capaz de apontar quando um determinado tipo nao é seguro para concorrencia, e trata isso como erro. além do compilador verificar erros com extrema diligencia, rust também é bem legivel e possui alta capacidade de escrita, mitigando erros cometidos e quantidade de linhas onde o erro pode ocorrer.
+
+	Legibilidade:
+		Rust e C++ tem uma legibilidade semelhante. Ambas linguages possuem forte ortogonalidade e também possuem o conceito de "struct", que possibilita organizar dados em tipos e estruturas. Rust também possibilita a sobrecarga de simbolos primitivos (como i32), que quando bem utilizado pode facilitar a leitura, mas quando mal usado deixa o código de dificil entendimento. 
+
+	Capacidade de escrita:
+		Tanto C++ quanto Rust possuem alta capacidade de escrita, dispondo de boa simplicidade e ortogonalidade, e de alta expressividade. Ambas as linguagens tem alto suporte para abstrações, tanto de dados quanto de subprogramas, o que possibilita restringir detalhes de implementação a pequenas partes do código, fazendo a escrita do resto do código mais simples. Além disso, rust possui operadores poderosos como os que podem ser vistos em python, porém sem as perdas de desempenho, fazendo com que o programa em rust possa ser mais sucinto. Um exemplo dessa capacidade de escrita, um programa em C para verificar que uma string é composta somente por espaços em branco, que ocuparia uma duzia de linhas, em Rust pode ser escrito em apenas uma, mantendo o mesmo desempenho.

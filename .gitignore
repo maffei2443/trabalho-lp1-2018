@@ -11,3 +11,4 @@ tmp/
 /*.png
 /*/.png
 comparison_tests/*/target
+test/*.exe
