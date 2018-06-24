@@ -9,8 +9,9 @@ void foo(int * v) {
 	v[2] = 9999;
 }
 
-void foo_fu(int * v) {
-	v[2] = 9999;
+void foo_fu(Fu fu) {
+	fu.v[2] = 9999;
+	printf("fu.v[2] == %d\n", fu.v[2]);
 }
 
 int main() {
@@ -18,5 +19,7 @@ int main() {
 	foo(v);
 	printf("%d\n", v[2]);
 	Fu fu;
-	fu
+	fu.v[2] = 1901;
+	foo_fu(fu);
+	printf("%d\n", fu.v[2]);
 }

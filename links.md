@@ -12,3 +12,5 @@ memory safety. However, this model also restricts the language’s
 expressiveness. Mapping semantics required of a collector implementation
 into Rust’s language model was the major challenge that
 we faced during the work.](http://users.cecs.anu.edu.au/~steveb/downloads/pdf/rust-ismm-2016.pdf)
+
+[For a class type with pointer data members, there are necessities to overload its default constructor, explicit constructor, copy constructor, destructor and assignment operator to prevent shallow copies, side effects and memory leaks. ](http://delivery.acm.org/10.1145/1360000/1352420/p213-yang.pdf?ip=201.22.186.209&id=1352420&acc=PUBLIC&key=4D4702B0C3E38B35%2E4D4702B0C3E38B35%2E0C5A9160825F9648%2E4D4702B0C3E38B35&__acm__=1529871160_621cd8aea6fce2ce03964ee2c1e78c5f)
