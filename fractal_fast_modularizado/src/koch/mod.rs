@@ -185,7 +185,7 @@ pub fn gen_koch() {
     }
 
     println!("Vai escrever...");
-    // img.save(rezscale_int.to_string()+ "_"  + &nrec.to_string() + "_output.png").unwrap();
+    img.save(rezscale_int.to_string()+ "_"  + &nrec.to_string() + "_output.png").unwrap();
     
     println!("Escreveu");
     let newtime = SystemTime::now();
