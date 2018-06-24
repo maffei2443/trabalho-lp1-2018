@@ -1,0 +1,10 @@
+[package]
+name = "mandel_rust_web"
+version = "0.1.0"
+authors = ["maffei2443 <leoitu22hotmail.com@gmail.com>"]
+
+[dependencies]
+num-complex = "0.2"
+image="*"
+[profile.dev]
+opt-level=3
