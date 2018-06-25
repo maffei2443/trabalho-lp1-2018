@@ -1,0 +1,59 @@
+Tier 2: 52
+
+Tier 2 platforms can be thought of as “guaranteed to build”. Automated tests
+are not run so it’s not guaranteed to produce a working build, but platforms
+often work to quite a good degree and patches are always welcome! Specifically,
+these platforms are required to have each of the following:
+
+ARM64 iOS
+ARM64 CloudABI
+ARM64 Android
+ARM64 Fuchsia
+ARM64 Linux
+ARM64 Linux with MUSL
+ARMv7 Android
+ARMv6 Linux
+ARMv6 Linux, hardfloat
+ARMv6 Linux with MUSL
+ARMv6 Linux, MUSL, hardfloat
+ARMv5TE Linux
+ARMv7 iOS, Cortex-a8
+ARMv7a Android
+ARMv7 CloudABI, hardfloat
+ARMv7 Linux
+ARMv7 Linux with MUSL
+ARMv7 iOS, Cortex-a9
+asm.js via Emscripten
+32-bit x86 iOS
+32-bit Windows w/o SSE
+32-bit Linux w/o SSE
+32-bit Linux w/o SSE, MUSL
+32-bit x86 Android
+32-bit CloudABI
+32-bit FreeBSD
+32-bit Linux with MUSL
+MIPS Linux
+MIPS Linux with MUSL
+MIPS64 Linux, n64 ABI
+MIPS64 (LE) Linux, n64 ABI
+MIPS (LE) Linux
+MIPS (LE) Linux with MUSL
+PowerPC Linux
+PPC64 Linux
+PPC64LE Linux
+S390x Linux
+SPARC Linux
+SPARC Solaris 10/11, illumos
+WebAssembly
+WebAssembly via Emscripten
+64-bit x86 iOS
+64-bit x86 Android
+64-bit NetBSD Rump Kernel
+64-bit Solaris 10/11, illumos
+64-bit CloudABI
+64-bit FreeBSD
+64-bit Fuchsia
+64-bit Linux
+64-bit Linux with MUSL
+NetBSD/amd64
+Redox OS

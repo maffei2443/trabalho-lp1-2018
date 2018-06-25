@@ -2,16 +2,17 @@ extern crate image;
 extern crate lit; 
 
 use std::time::{SystemTime};
-use lit::koch::*;
 use image::RgbImage;
 
+use std::thread;
+use std::sync::{Arc, Mutex};
+// lit é o nome deste pacote; está definido no Cargo.toml
+use lit::koch;
+use lit::mandelbrot;
+
 const REZSCALE : i32 = 1;
-// const GLOBX : usize = (640 * REZSCALE) as usize;
-// const GLOBY : usize = (480 * REZSCALE) as usize;
 const GLOBTX : usize = (480 * REZSCALE) as usize;
 const GLOBTY : usize = (480 * REZSCALE) as usize;
-
-
 
 fn render_tsquare(p1x: f64, p1y: f64, side: f64, n: i64,  mat: &mut [[bool; GLOBTX]; GLOBTY]){
     let n2 = n - 1;
@@ -87,11 +88,6 @@ fn render_tsquarepre(p1x: f64, p1y: f64, side: f64, n: i64, nth: i64, arc: Arc<M
     }
 }
 
-
-use std::thread;
-// use std::sync::mpsc;  // mpsc: multiple producer, single consumer
-use std::sync::{Arc, Mutex};
-
 fn tsquare() {
     let systime = SystemTime::now();
     let nrec = 15;  // NAO AUMMENTAR!
@@ -131,6 +127,8 @@ fn tsquare() {
 
 fn main(){
     // koch();
-    gen_koch();
+    koch::gen_koch();
     tsquare();
+    mandelbrot::get_mandelbrot();
+    println!("Gerou os fractais");
 }

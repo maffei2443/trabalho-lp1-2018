@@ -1,0 +1,18 @@
+Tier 1: 8
+Tier 1 platforms can be thought of as “guaranteed to work”.
+Specifically they will each satisfy the following requirements
+
+<li>Official binary releases are provided for the platform.</li>
+<li>Automated testing is set up to run tests for the platform.</li>
+<li>Landing changes to the <code class="highlighter-rouge">rust-lang/rust</code> repository’s master branch is gated on
+tests passing.</li>
+<li>Documentation for how to use and how to build the platform is available.</li>
+
+32-bit OSX (10.7+, Lion+)
+32-bit MinGW (Windows 7+)
+32-bit MSVC (Windows 7+)
+32-bit Linux (2.6.18+)
+64-bit OSX (10.7+, Lion+)
+64-bit MinGW (Windows 7+)
+64-bit MSVC (Windows 7+)
+64-bit Linux (2.6.18+)
