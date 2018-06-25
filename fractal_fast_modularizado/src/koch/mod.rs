@@ -4,7 +4,7 @@ use self::image::RgbImage;
 use std::thread;
 // use std::sync::mpsc;  // mpsc: multiple producer, single consumer
 use std::sync::{Arc, Mutex};
-const REZSCALE : i32 = 1;
+const REZSCALE : i32 = 1;  // no windows, mais que 1 estoura a pilha
 const GLOBX : usize = (640 * REZSCALE) as usize;
 const GLOBY : usize = (480 * REZSCALE) as usize;
 

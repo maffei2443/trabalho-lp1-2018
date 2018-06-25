@@ -2,7 +2,7 @@ extern crate image;
 
 use std::time::{SystemTime, UNIX_EPOCH};
 use image::RgbImage;
-const rezscale : i32 = 5;
+const rezscale : i32 = 1;
 
 const globx : usize = (640 * rezscale) as usize;
 const globy : usize = (480 * rezscale) as usize;
@@ -41,9 +41,9 @@ fn draw_line(mat: &mut [[bool; globx]; globy], x0: i64, y0: i64, x1: i64, y1: i6
     }
 }
 
-fn rendersnowflakeside(p1x: f64, p1y: f64, p2x: f64, p2y: f64, n: i64, mat: &mut [[bool; globx]; globy]){
+fn rendersnowflakeside(p1x: f64, p1y: f64, p2x: f64, p2y: f64, n: i64, img: &mut mat){
     if n == 0{
-        draw_line(mat, p1x as i64, p1y as i64, p2x as i64, p2y as i64);
+        draw_line(&mut img, p1x as i64, p1y as i64, p2x as i64, p2y as i64);
     }
     else{
         let n2 = n - 1;
@@ -72,25 +72,25 @@ fn rendersnowflakeside(p1x: f64, p1y: f64, p2x: f64, p2y: f64, n: i64, mat: &mut
 
 fn main() {
     // let rezscale = 10;
-    let systime = SystemTime::now();
     let mut img = RgbImage::new(globx as u32, globy as u32);
     println!("SEQUENCIA");
     println!("rezscale: {}", rezscale);
+    let rezscale_int = rezscale;
     let rezscalef = rezscale as f64;  // nao precisa mas do valor inteiro
-    let nrec = 15;
     println!("Recursoes: {}", nrec);
+    let nrec = 15;
     let mut mat = [[false; globx]; globy];
 
-    rendersnowflakeside(270.0 * rezscalef, 211.13249 * rezscalef, 320.0 * rezscalef, 297.73503 * rezscalef, nrec, &mut mat);
+    rendersnowflakeside(270.0 * rezscalef, 211.13249 * rezscalef, 320.0 * rezscalef, 297.73503 * rezscalef, nrec, &mut img);
     println!("one side done!");
-    rendersnowflakeside(370.0 * rezscalef, 211.13249 * rezscalef, 270.0 * rezscalef, 211.13249 * rezscalef, nrec, &mut mat);
+    rendersnowflakeside(370.0 * rezscalef, 211.13249 * rezscalef, 270.0 * rezscalef, 211.13249 * rezscalef, nrec, &mut img);
     println!("one side done!");
-    rendersnowflakeside(320.0 * rezscalef, 297.73503 * rezscalef, 370.0 * rezscalef, 211.13249 * rezscalef, nrec, &mut mat);
+    rendersnowflakeside(320.0 * rezscalef, 297.73503 * rezscalef, 370.0 * rezscalef, 211.13249 * rezscalef, nrec, &mut img);
     println!("one side done!");
     
     for x in 0..globx {
         for y in 0..globy {
-            if mat[y][x] {
+            if mat[x][y] {
                 img.get_pixel_mut(x as u32, y as u32).data = [255, 255, 255];
             }
         }
